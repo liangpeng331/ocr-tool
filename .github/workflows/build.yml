@@ -1,0 +1,79 @@
+name: Build macOS App
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  macos-arm64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pyinstaller
+          pip install rapidocr-onnxruntime pyperclip pillow pyobjc
+
+      - name: Generate icon
+        run: python build_icon.py
+
+      - name: Build with PyInstaller
+        run: pyinstaller ocr_tool.spec --distpath dist --workpath build
+
+      - name: Create DMG
+        run: |
+          hdiutil create \
+            -volname "OCR Tool" \
+            -srcfolder "dist/OCR Tool.app" \
+            -ov -format UDZO \
+            "dist/OCR-Tool-arm64.dmg"
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: OCR-Tool-macOS-ARM64
+          path: dist/OCR-Tool-arm64.dmg
+
+  macos-x86_64:
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pyinstaller
+          pip install rapidocr-onnxruntime pyperclip pillow pyobjc
+
+      - name: Generate icon
+        run: python build_icon.py
+
+      - name: Build with PyInstaller
+        run: pyinstaller ocr_tool.spec --distpath dist --workpath build
+
+      - name: Create DMG
+        run: |
+          hdiutil create \
+            -volname "OCR Tool" \
+            -srcfolder "dist/OCR Tool.app" \
+            -ov -format UDZO \
+            "dist/OCR-Tool-x86_64.dmg"
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: OCR-Tool-macOS-Intel
+          path: dist/OCR-Tool-x86_64.dmg
