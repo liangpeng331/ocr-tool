@@ -19,8 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install pyinstaller
-          pip install rapidocr-onnxruntime pyperclip pillow pyobjc
+          pip install pyinstaller rapidocr-onnxruntime pyperclip pillow pyobjc-core pyobjc-framework-Cocoa pyobjc-framework-Quartz pyobjc-framework-Vision
 
       - name: Generate icon
         run: python build_icon.py
@@ -55,8 +54,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install pyinstaller
-          pip install rapidocr-onnxruntime pyperclip pillow pyobjc
+          pip install pyinstaller rapidocr-onnxruntime pyperclip pillow pyobjc-core pyobjc-framework-Cocoa pyobjc-framework-Quartz pyobjc-framework-Vision
 
       - name: Generate icon
         run: python build_icon.py
