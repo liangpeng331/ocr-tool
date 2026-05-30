@@ -625,9 +625,9 @@ class OCRApp(NSObject):
         self._trigger_selection()
 
     def _on_hotkey(self):
-        # 在主线程执行截图流程
+        # 在主线程执行截图流程（必须用 selector 字符串，不能传 bound method）
         self.performSelectorOnMainThread_withObject_waitUntilDone_(
-            self._trigger_selection, None, False
+            'performOCR:', None, False
         )
 
     def _trigger_selection(self):
